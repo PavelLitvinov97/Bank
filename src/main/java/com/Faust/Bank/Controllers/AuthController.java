@@ -30,7 +30,7 @@ public class AuthController {
     @Autowired
     UserRepository users;
 
-    @PostMapping("/auth/signin")
+    @PostMapping("v1/auth/signin")
     public ResponseEntity signin(@RequestBody AuthenticationRequest data) {
 
         try {
