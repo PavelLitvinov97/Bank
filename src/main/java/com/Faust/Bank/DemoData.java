@@ -22,6 +22,7 @@ import java.util.Arrays;
 public class DemoData implements CommandLineRunner {
 
 
+
     @Autowired
     IssueRepository issueRepository;
 
