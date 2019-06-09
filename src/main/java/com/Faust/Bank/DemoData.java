@@ -37,8 +37,8 @@ public class DemoData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        log.debug("initializing vehicles data...");
-        Arrays.asList("moto", "car").forEach(v -> this.issueRepository.saveAndFlush(Issue._builder().name(v).build()));
+        log.debug("initializing data...");
+        Arrays.asList("issue1", "issue2").forEach(v -> this.issueRepository.saveAndFlush(Issue._builder().name(v).build()));
 
         this.users.save(User.builder()
                 .username("user")
