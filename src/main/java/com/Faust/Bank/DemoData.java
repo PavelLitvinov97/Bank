@@ -21,10 +21,6 @@ import java.util.Arrays;
 @Slf4j
 public class DemoData implements CommandLineRunner {
 
-    @Bean
-    public PasswordEncoder bcryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Autowired
     IssueRepository issueRepository;
