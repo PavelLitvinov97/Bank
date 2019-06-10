@@ -20,6 +20,11 @@ public class Investment {
     private Long id ;
 
     @Column
-    private String name;
+    private Long amount;
 
+    @Column
+    private Long value;
+
+    @Column
+    private String owner;
 }

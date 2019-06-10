@@ -3,6 +3,7 @@ package com.Faust.Bank.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -53,12 +54,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// We don't need CSRF for this example
 		httpSecurity.csrf().disable()
 				// dont authenticate this particular request
-				.authorizeRequests().antMatchers("/v1/auth/signin").permitAll().
+				.authorizeRequests()
+				.antMatchers(HttpMethod.POST, "/v1/auth/signin").permitAll()
 				// all other requests need to be authenticated
-				anyRequest().authenticated().and().
+				.anyRequest().authenticated()
+				.antMatchers(HttpMethod.GET, "/v1/treasury/issues").hasAnyRole("EMPEROR", "TREASURER")
+				.antMatchers(HttpMethod.GET, "/v1/treasury/issues/**").hasAnyRole("EMPEROR", "TREASURER")
+				.antMatchers(HttpMethod.DELETE, "/v1/treasury/issues/**").hasAnyRole("EMPEROR", "TREASURER")
+				.antMatchers(HttpMethod.POST, "/v1/treasury/issues").hasRole("TREASURER")
+				.antMatchers(HttpMethod.PUT, "/v1/treasury/issues/**").hasAnyRole("EMPEROR", "TREASURER")
+
+				.antMatchers(HttpMethod.GET, "/v1/treasury/supplies").hasAnyRole("PROVIDER", "TREASURER")
+				.antMatchers(HttpMethod.GET, "/v1/treasury/supplies/**").hasAnyRole("PROVIDER", "TREASURER")
+				.antMatchers(HttpMethod.DELETE, "/v1/treasury/supplies/**").hasAnyRole("PROVIDER", "TREASURER")
+				.antMatchers(HttpMethod.POST, "/v1/treasury/supplies").hasRole("TREASURER")
+				.antMatchers(HttpMethod.PUT, "/v1/treasury/supplies/**").hasAnyRole("PROVIDER", "TREASURER")
+
+				.antMatchers(HttpMethod.GET, "/v1/treasury/investments").hasRole("USER")
+				.antMatchers(HttpMethod.GET, "/v1/treasury/investments/**").hasRole("USER")
+				.antMatchers(HttpMethod.POST, "/v1/treasury/investments").hasRole("USER").and()
 				// make sure we use stateless session; session won't be used to
 				// store user's state.
-				exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		// Add a filter to validate the tokens with every request

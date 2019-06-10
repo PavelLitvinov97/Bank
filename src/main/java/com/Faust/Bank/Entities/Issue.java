@@ -21,6 +21,15 @@ public class Issue implements Serializable {
     private Long id ;
 
     @Column
-    private String name;
+    private Long amount;
+
+    @Column
+    private Long value;
+
+    @Column
+    private String status;
+
+    @Column
+    private String owner;
 
 }

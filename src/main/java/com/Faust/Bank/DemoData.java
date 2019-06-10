@@ -35,23 +35,35 @@ public class DemoData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.debug("initializing data...");
-        Arrays.asList("issue1", "issue2").forEach(v -> this.issueRepository.saveAndFlush(Issue._builder().name(v).build()));
+        Arrays.asList("issue1", "issue2").forEach(v -> this.issueRepository.saveAndFlush(Issue._builder().build()));
 
         this.users.save(User.builder()
-                .username("user")
+                .username("jester")
                 .password(this.passwordEncoder.encode("password"))
-                .roles(Arrays.asList( "ROLE_USER"))
+                .roles(Arrays.asList("ROLE_USER"))
                 .build()
         );
 
         this.users.save(User.builder()
-                .username("admin")
+                .username("emperor")
                 .password(this.passwordEncoder.encode("password"))
-                .roles(Arrays.asList("ROLE_USER", "ROLE_ADMIN"))
+                .roles(Arrays.asList("ROLE_USER", "ROLE_EMPEROR"))
                 .build()
         );
 
-        log.debug("printing all users...");
-        this.users.findAll().forEach(v -> log.debug(" User :" + v.toString()));
+        this.users.save(User.builder()
+                .username("treasurer")
+                .password(this.passwordEncoder.encode("password"))
+                .roles(Arrays.asList("ROLE_USER", "ROLE_TREASURER"))
+                .build()
+        );
+
+        this.users.save(User.builder()
+                .username("provider")
+                .password(this.passwordEncoder.encode("password"))
+                .roles(Arrays.asList("ROLE_USER", "ROLE_PROVIDER"))
+                .build()
+        );
+
     }
 }

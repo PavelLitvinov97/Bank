@@ -28,10 +28,18 @@ public class User implements UserDetails {
     Long id;
 
     @NotEmpty
+    @Column
     private String username;
 
     @NotEmpty
+    @Column
     private String password;
+
+    @Column
+    private Long ticketsValue;
+
+    @Column
+    private Long moneyValue;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

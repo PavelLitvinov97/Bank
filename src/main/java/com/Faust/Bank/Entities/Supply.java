@@ -20,5 +20,14 @@ public class Supply {
     private Long id ;
 
     @Column
-    private String name;
+    private String good;
+
+    @Column
+    private Long price;
+
+    @Column
+    private String owner;
+
+    @Column
+    private String status;
 }
