@@ -28,7 +28,7 @@ public class IssueController {
     @GetMapping("/v1/treasury/issues")
     public ResponseEntity GetAllIssues(@RequestHeader(value = "Authorization") String token){
         String username = jwtTokenUtil.getUsernameFromToken(token.substring(7));
-        if((username == "emperor") || (username == "treasurer")) {
+        if(username.equals("emperor") || username.equals("treasurer")) {
             return ok(issueRepository.findAll());
         }
         else return status(403).build();
@@ -38,7 +38,7 @@ public class IssueController {
     @GetMapping("/v1/treasury/issues{id}")
     public ResponseEntity GetIssue(@PathVariable Long id, @RequestHeader(value = "Authorization") String token){
         String username = jwtTokenUtil.getUsernameFromToken(token.substring(7));
-        if((username == "emperor") || (username == "treasurer")) {
+        if(username.equals("emperor") || username.equals("treasurer")) {
             return ok(issueRepository.findById(id)
                     .orElseThrow(() -> new IssueNotFoundException(id)));
         }
@@ -48,7 +48,7 @@ public class IssueController {
     @DeleteMapping("/v1/treasury/issues/{id}")
     public ResponseEntity DeleteIssue(@PathVariable Long id, @RequestHeader(value = "Authorization") String token) {
         String username = jwtTokenUtil.getUsernameFromToken(token.substring(7));
-        if ((username == "emperor") || (username == "treasurer")) {
+        if (username.equals("emperor") || username.equals("treasurer")) {
             Issue existed = issueRepository.findById(id)
                     .orElseThrow(() -> new IssueNotFoundException(id));
             issueRepository.delete(existed);
@@ -60,7 +60,7 @@ public class IssueController {
     @PostMapping("/v1/treasury/issues")
     public ResponseEntity CreateIssue(@RequestBody Issue issue, @RequestHeader(value = "Authorization") String token){
         String username = jwtTokenUtil.getUsernameFromToken(token.substring(7));
-        if ((username == "emperor") || (username == "treasurer")) {
+        if (username.equals("emperor") || username.equals("treasurer")) {
             issue.setOwner(username);
             Issue created = issueRepository.save(issue);
             return ok(created);
@@ -74,14 +74,14 @@ public class IssueController {
         Issue issue1 = issueRepository.findById(id).
                 orElseThrow(() -> new IssueNotFoundException(id));
 
-        if (username == "treasurer") {
+        if (username.equals("treasurer")) {
             issue1.setAmount(issue.getAmount());
             issue1.setValue(issue.getValue());
             issue1.setStatus(issue.getStatus());
             issueRepository.saveAndFlush(issue1);
             return ok(issue1);
         }
-        else if(username == "emperor") {
+        else if(username.equals("emperor")) {
             issue1.setStatus("Approved!");
             issueRepository.saveAndFlush(issue1);
             return status(200).build();
